@@ -1,0 +1,377 @@
+# Skill 2.2: Describe core workload products available in Azure
+
+- Azure Virtual Machines (IaaS)
+  - VM - software based computer running on a physical computer
+    - Physical computer (host computer)
+      - Provides disk space, memory, CPU power and more
+      - Hypervisor software - ran by host computers to create/manage one or more VMs (guests)
+    - Host & guest do not have the same OS - guest can use any OS
+    - But powerful  VMs require powerful host since they use the same physical hardware
+  - Creating a VM
+    - Click 'Create a Resource'
+    - Click 'Computer'
+    - Click 'See All link'
+    - Click 'Ubuntu Server' (Or choose server)
+    - Click 'Create' button
+    - Click 'Create New' for a new resource group
+    - Enter the resource group name and click 'Ok'
+    - Enter VM name
+    - Scroll down and select Password for the authentication type
+    - Enter a username for the admin account
+    - Enter password for admin account
+    - Confirm
+    - Click Next 3 times until the Management screen appears
+    - Set Boot Diagnostics to 'Off' in Monitoring section
+    - Click Review + Create
+  - Host computer managed by Microsoft
+  - Guest computer managed by the user
+  - IaaS service in Azure
+  - Click 'Stop' button in Azure to pause VM and billing - new IP will be assigned if a static one isn't being used
+  - Stopping in the VM itself vs. Azure Portal will still incur charges
+  - Downtime
+    - Planned maintenance - OS or driver updates; downtime happens if the host computer has to reboot
+    - Unplanned maintenance - Computer health is at risk; Azure will attempt to move to a healthy host computer
+      - The VMs state, including memory and open files is preserved
+    - Unexpected downtime - Azure cannot successfully move guest to a healthy host computer during unplanned maintenance
+    - Availability Sets - protect from maintenance and downtime events caused by hardware failures
+      - Update domains - protects from host computer reboots
+        - 5 update domains are created by default
+          - Updates 1 domain at a time
+          - Waits 30 minutes between updating the domains to allow recovery time
+        - Not tired to a particular fault domain
+        - Protect from planned maintenance events
+      - Fault domains - logical representation of the physical rack where the host computer is
+        - 2 are assigned to a set
+        - Protect from unplanned maintenance events and downtime
+      - *Must deploy 2 or more VMs in the availability set
+      - Always separate workloads into different availability sets (website, db, etc.)
+      - Disadvantages
+        - Must explicitly create every machine
+        - ARM templates can be used but still have to configure machines with software and configuration for the app
+        - Must configure something (i.e. load balancer) to route traffic
+        - Cost - may pay for more than you need
+        - Not compatible with availability zones
+    - Scale Sets - solves configuration problems with availability sets
+      - Tell Azure the OS and # of VMs
+      - Other options - create load balancer or gateway
+      - Azure creates everything in 1 easy step
+      - Deployed in availability sets automatically - multiple fault and update domains
+      - Compatible with availability zones - protects against datacenter issues
+      - Can be scaled when more or fewer VMs are required
+        - Azure Auto-Scale feature
+          - Define scaling rules (CPU, disk usage, network usage, etc.)
+          - Tell Azure when to add or remove instances
+          - Ensures availability while reducing costs by taking advantage of Azure's elasticity
+      - 99.95% SLA - multi-VM deployment scenario
+      - 99.9% SLA - single-instance VM w/ premium storage (SSDs)
+  - External Notes
+    - Azure automatically routes traffic between subnets in a virtual network. Therefore, all virtual machines in a virtual network can connect to the other virtual machines in the same virtual network. Even if the virtual machines are on separate subnets within the virtual network, they can still communicate with each other.
+    - To ensure that a virtual machine cannot connect to the other virtual machines, the virtual machine must be deployed to a separate virtual network.
+    - By default, VMs in the same VNet could communicate with each other with any port and any protocol in the NSG unless you have added some inbound or outbound port rules with high priority. Also some rules in windows firewall blocks on the VMs.
+- Azure App Service (PaaS)
+  - PaaS service for hosting websites - only responsible for your own code
+  - Automatically runs on an Azure VM
+    - Can be shared or dedicated to you
+  - Frontend VM - runs software to help route to the actual VMs running the code (middleman)
+  - App Service Plan - logical container for VMs running web app
+    - Created within a specific Azure region
+    - Specific # of VMs the app runs on and its properties
+    - Multiple apps can run in the same App Service Plan and share VMs
+    - Pricing Tiers - can change at any time
+      - Free - No cost testing on shared VMs with other customers
+      - Shared - Low cost testing with additional features running on shared VMs with other customers
+      - Basic, Standard, Premium, Premium V2 - Higher cost with many additional features on dedicated VMs not shared with customers
+        - Ability to scale out - run multiple VMs
+          - Basic - up to 3
+          - Standard - up to 10
+          - Premiums - up to 20
+    - Always charged for App Service Plans unless you delete them
+  - Web Apps
+    - Can be created in new or existing App Service Plan
+    - Choose between VM preconfigured with a runtime (Java, .NET, PHP, etc. - multiple versions) or a Docker container
+- Azure Container Instances (ACI) (PaaS)
+  - PaaS service
+  - Run containerized applications
+  - Containers - help move applications between different environments
+    - Created with Images
+    - Image - zipped version of an application that includes everything the app needs to run (i.e. db, web server, etc.)
+      - Can be deployed to any environment that supports containers
+      - When deployed images are used to start a container to run the app
+    - Container runtimes - run containers (Docker)
+    - Containers do not have access to other containers on a computer unless configured
+  - Running containers in Azure Container Instances ACI
+    - Use Docker tag or image URL to tell ACI where to find the image
+    - Azure creates resources to run the container
+    - SUPER CHEAP - Only pay for the memory and CPU you use; not the VM
+    - OS for the container is part of the image
+      - Choose OS for container that's compatible for the VM
+      - Linux container can't work on a Windows VM
+    - Works for simple applications
+    - Container group - runs multiple containers within an ACI instance
+    - Not good for large apps that may need scaling (Choose Kubernetes instead)
+    - Cannot change DNS Name Label or Image after creation
+      - Delete and re-create to change (may lose public IP address)
+  - No Auto-scaling
+- Azure Kubernetes Service (AKS) (PaaS?)
+  - Container orchestration service
+  - Monitors and ensure containers are always running
+  - Auto-scaling
+  - Pod - Group of related containers that can share resources
+    - Containers cannot share resources between pods
+  - Node (worker) - runs computer Kubernetes pods
+    - Must have a container runtime like Docker running
+    - Runs pods and services required for Kubernetes
+    - Kubernetes instance > master nodes > multiple nodes
+    - Master node manages/controls the multiple nodes
+      - Contains configuration and services necessary to manage the orchestration of pods and other Kubernetes entities
+      - AKS offloads the burden of configuring the Kubernetes master to Microsoft
+  - Azure creates the master and nodes for you
+    - Simply deploy the containers
+  - Simplifies creation and management of Kubernetes clusters
+- Windows Virtual Desktop (WVD) (PaaS)
+  - PaaS service that provides desktop virtualization managed by Microsoft
+  - Desktop virtualization
+    - Complex to configure but fully managed by Microsoft afterwards
+  - Using WVD
+    - Create a WVD tenant
+      - tenant - one or more host pools
+      - host pools - session hosts (Azure VMs) and 1 or more app groups
+    - Add users from Azure Active Directory (AAD) to access OSes and apps in the tenant and assign permissions
+      - Access WVD as a user
+        - Use WVD client app for Windows
+        - Use WVD client app for MacOS
+        - Use WVD client app for iOS
+        - Use WVD client app for Android
+        - Use web-based client from any web browser
+      - Users will see a list of OSes and applications they can use
+        - Looks like apps are running locally but they are running virtually
+    - FSLogix
+- Azure Virtual Networks (VNet) (?)
+  - Allow Azure services communicate with each other using the internet (on and off premises)
+  - Azure automatically creates a VNet when VMs are created
+  - Users can also create their own VNets
+    - Must be created before the VM
+  - Wouldn't be able to access the VM without a VNet
+  - VNet has:
+    - Network Interface Card (NIC)
+    - IP Address
+    - Break up VNet into multiple subsets
+  - VNets are usually created before the resources that use them
+  - Cannot connect a VM to a VNet after it's been created
+  - Can connect VM to an existing VNet
+  - VNet Integration - connect App Service app to existing VNet
+  - All private IP Addresses
+  - Network Security Groups - controls traffic to VNets
+- ExpressRoute
+  - ExpressRoute - offers speeds up to 10 Gbps over dedicated fiber optic cables on private network
+    - Connect from on-premises to Microsoft Enterprise Edge Router (MSEE) that then connects to Azure
+    - MSSE on edge of Microsoft's network
+    - User connection usually on the edge of their on-premises network
+    - Doesn't traverse the public internet
+    - Bandwidth is more reliable
+    - Designed for high availability
+      - Redundant connections
+      - Circuit with 5 Gbps actually has 10 Gbps
+  - Connect to on-premises networks using virtual private network (VPN) thanks to Azure VNets
+  - VPNs don't always meet the requirements for customers
+    - Limited to max of 1.25 Gbps in network speed
+  - Edge device - access point into a network
+    - Network = circle
+      - Inside - network devices
+      - Perimeter - edge device
+    - On-premises Network <--> Service Provider (ISP) <--> MSEE Router <--> Azure
+      - ExpressRoute Direct - cuts out 3rd-party  ISP
+  - Circuit - ExpressRoute connection
+- Azure Blob Storage - Container (blob) Storage
+  - Stores unstructured data (text files, images, videos, documents, etc.)
+  - Blob - entity stored in a Blog Storage
+    - Stored in storage containers
+    - 3 Types
+      - Block blobs - store files used by apps
+      - Append blobs - store constantly updated data (diagnostic logs) like block blobs but specialized for append operations.
+      - Page blobs - store virtual hard disk (.vhd) files used in VMs
+  - Azure Storage Explorer - free tool to upload data to Azure Blob Storage
+  - Command line tools for uploading are available too
+  - Data box - used to move large amount of data
+    - Data Box Edge - online service to copy files to Azure Storage
+    - Data Box Offline service - Microsoft ships hardware, you encrypt with BitLocker and send back to Microsoft
+    - Data Box Heavy - Microsoft ships rugged device on wheels that can hold up to 1 petabyte of data
+- Disk Storage for VMs
+  - Disks used in VMs
+  - Azure automatically creates the disk for temp storage when VMs are created
+    - Deleted automatically during maintenance events
+    - Use an image from Azure Storage to persist long term storage
+  - Available Disk Types
+    - Traditional Hard Disks (HDD)
+      - cheaper
+      - non-critical data
+    - Solid-State Drives
+      - Standard Tier - light use
+      - Azure Premium Disk - heavy sue
+  - Managed Disks
+    - Recommended by Microsoft
+    - Microsoft handles the storage account
+    - No storage limitations
+    - User only worries about the disk
+  - Unmanaged Disks
+    - Use Azure Storage account in your Azure subscription
+    - User must manage the account
+    - Disadvantages
+      - Limitations in Azure Storage
+      - Heavy disk usage leads to downtime because of throttling
+      - Possibility of losing all disks (single point failure)
+  - Backed by page blobs in Azure Storage
+- Azure Files
+  - Disk storage when a VM isn't needed
+  - Backed by Azure Storage
+    - Azure Storage account required
+  - Completed managed file share
+  - Can be mounted on Azure VMs and on-premises
+  - Cannot mount with Windows 7 or Windows Server 2008 on premises - they only support SMB 2.1
+  - Uses SMB
+    - TCP port 445 must be opened on your network
+    - Use Test-NetConnection PowerShell cmdlet to test connection to port 445
+  - Disadvantages
+    - Remote location of files
+    - Longer file transfer times
+      - Solution - Azure File Sync
+  - Azure File Sync - stored on local network and keeps files in Azure File synced with on-premises service
+    - Local copy is accessed quickly
+- Storage Tiers for Blob Storage
+  - Provide different pricing for Blob Storage depending on usage and storage time
+  - Tiers
+    - Hot Storage Tier
+      - Data accessed often
+      - Highest cost of storage
+      - Data access cost is low
+      - Guarantees access to first byte in milliseconds
+    - Cool Storage Tier
+      - Data stored long-term
+      - Middle storage costs
+      - High data access costs
+      - Must keep data stored for at least 30 days
+      - Guarantees access to first byte in milliseconds
+    - Archive Storage Tier
+      - Long-term data storage
+      - Lowest storage costs
+      - Highest access costs
+      - Must keep data stored for at least 180 days (3 months) or get charged early deletion fee
+      - Takes longer to retrieve
+      - Guarantees access to first byte within 15 hours
+- DB Overview
+  - Relational DBs
+    - SQL
+    - Tables of data related to each other
+    - Must conform to schema
+    - Adding a new column means you have to update the schema
+    - Types - Oracle, SQL Server, PostgreSQL and MySQL
+  - Non-relational DBs
+    - NoSQL - 4 Types
+      - Key-value
+      - Column
+      - Document
+      - Graph
+    - No schemas
+    - No need to update schema when adding new columns
+- Cosmos DB
+  - Hosted NoSQL DB in Azure
+  - Supports all NoSQL DB types
+  - Devs can use their existing skills to use Cosmos DB without writing new code
+  - Choosing the API chooses the DB type
+    - Core (SQL)
+      - Document DB
+      - Query using SQL
+    - Azure Cosmos DB for MongoDB API
+      - Document DB
+      - Migrate from MongoDB to Cosmos DB
+    - Cassandra
+      - Column DB
+      - Migrate from Cassandra to Cos
+    - Azure Table
+      - Key-value DB
+      - Migrate from Azure Table Storage to Cosmos DB
+    - Gremlin
+      - Graph DB
+      - Migrate from Gremlin to Cosmos DB
+  - Turnkey Global Distribution - instantly replicate data globally
+    - Ensures users have the fastest experience possible
+  - Azure Cosmos DB is a great way to store unstructured and JSON data.
+- Azure SQL Database (PaaS)
+  - PaaS service for SQL Server DB hosting
+  - Microsoft manages it
+  - Only worry about the DB and data
+  - Relational DB
+  - Deployment Options
+    - Single DB (see Charts section)
+      - DB running in hosted SQL Server instance running in Azure
+      - Managed by Microsoft
+      - Purchase Models
+        - Database Transaction Unit (DTU)
+          - Collection of CPU, memory and data reads and writes
+          - 3 Tiers
+            - Basic
+            - Standard
+            - Premium
+        - Virtual Core (vCore)
+          - Virtual CPU
+          - Easy to configure the exact hardware configuration you need
+          - Tiers
+            - General Purpose
+            - Business Critical
+            - Provisioned Tier - User chooses CPU, memory and other resources
+            - Serverless Tier - User chooses range of resource needs to control costs more effectively Elastic Pool
+    - Elastic pool - more than 1 db all managed by the same SQL db server
+      - For SaaS offerings
+      - Allows multiple users to have their own DBs
+      - Can move DBs in and out of the pool
+    - Scaling
+      - Vertical Only - Scale up and down easily with Azure SQL DB
+      - Cannot scale horizontally to provide additional copies of data in multiple regions
+    - Managed Instance
+      - Easy migration path from on-premises or non-Azure environment to Azure
+      - Fully compatible with SQL Server on-premises
+      - Can sit within Azure VNet
+      - Isolated VNet
+      - Private IP Address
+      - Easy to lift and shift to Azure with little to no configuration changes
+    - Azure Data Migration Service (DMS) - Easily migrate to Azure
+      - Wizard experience
+      - Uses Azure VNet for the migration
+      - DMS sets up synchronization between the source db and Azure SQL db
+        - As long as the source is online, all changes are synced to Azure
+    - To migrate, you must connect with VPN or ExpressRoute
+- Azure Database for MySQL
+  - Relational DB
+  - Fully managed cloud offering of the Community Edition of MySQL
+  - Microsoft manages...
+    - DB server
+    - Security concerns
+    - Complex tasks like performance tuning
+  - MySQL
+    - Open source
+    - Most popular open-source db system in the world
+  - Data secured both at rest and in motion
+    - At rest - when stored in the db
+    - In motion - when users are querying
+  - Pricing Plans - moving up provides more CPU cores and memory, as well as multiple tiers
+    - Basic - light usage
+    - General Purpose - business use
+    - Memory Optimized - high-performance requirements
+  - Easily move to the cloud
+- Azure Database for PostgreSQL
+  - PostgreSQL - relational, open-sourced DB system
+  - First designed to run on Linux or Unix but now available for most OSes
+  - Designed for Enterprise
+  - Supports Large # of users performing complex operations
+  - Managed by Microsoft - server, db security, performance, etc.
+  - Similar pricing to Azure DB for MySQL
+    - Basic
+    - General Purpose
+    - Memory Optimized
+- Azure Marketplace
+  - Marketplace for Microsoft and 3rd-party services and resources
+  - Access by clicking 'Create A Resource'
+  - 'See All' takes you to the full Marketplace
+  - Marketplace uses ARM templates that deploy one or more services
+    - Single deployments - Web App template
+    - Multiple deployments - DataStax Enterprise db cluster

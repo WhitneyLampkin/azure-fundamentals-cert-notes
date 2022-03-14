@@ -1,0 +1,56 @@
+# Thought Experiment
+
+- Setup large # of VMs
+  - Needs
+    - High availability
+      - Solution - deploy to multiple regions
+    - Protection from disasters in datacenter inside of a region
+      - Solution - Availability Zones
+    - Protection from power outages
+      - Solution - Availability Zones or Sets(?)
+    - Deploy 3 Services - need logical groupings
+      - 2 for marketing
+      - 1 for development division
+      - Solution - Resource Groups
+    - CTO wants to control access to services and how they are configured
+        - - Solution - Management Groups
+    - Have specific configurations for virtual networks (VNets)
+      - Solution - Azure Virtual Networks
+    - Easily deploy to new regions later with same configurations
+      - Solution - ARM templates
+    - Prevent downtime from reboots and hardware failures
+      - Solution - Availability Sets
+    - Need to add additional CPU power when traffic spikes but downgrade when it's low again
+      - Solution - Scale Sets
+    - Move PHP web portal to cloud
+      - With easy scaling when usage spikes
+      - Solution - Azure App Service
+    - Run Docker image in Azure - only runs for a few minutes a month
+      - looking for most cost-efficient option
+      - Solution - Azure Container Instances (ACI)
+    - Also have a containerized image with sporadic usage
+      - More complex
+      - Requires more computing resources
+      - Always needs to be running and available
+      - Solution - Azure Kubernetes Service (AKs)
+    - Sales employees need to be able to access Office apps from anywhere but not have the data stored on their devices
+      - Solution - Windows Virtual Desktop
+    - Have multi-tiered apps to move to the cloud but devs don't know how to accomplish that
+      - (?)
+    - Will still need some things to stay on-premises
+      - Large files
+      - Animations
+      - Don't want to slow down app with large data stored in cloud
+      - Privacy
+      - Needs a lot of bandwidth
+      - Don't want to transfer over internet
+      - Solution - ExpressRoute
+    - Keep order history stored as PDFs
+      - Won't be accessed often but needs to be available in the future if  needed
+      - Solution - Azure Blob Storage
+    - Persist data on VMs even if downtime happens
+      - Solution - Disk Storage (managed)
+    - Other persisted data needs to be accessed on-premises running Windows Server 2016 without installing anything
+      - Solution - Azure Files
+    - Need encrypted MySQL db
+      - Azure DB for MySQL

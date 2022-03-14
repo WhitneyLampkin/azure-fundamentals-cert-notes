@@ -7,7 +7,7 @@
 			- Systems that are scalable, agile and so forth.
 			- Distributed computing resources accessible on a network
 - Public cloud - traditional cloud model available over the public internet.
-	- AKA multitenant environment
+	- AKA multi-tenant environment
 	- Shared infrastructure available on a public network
 	- Network, storage, VMs used by your app are provided by a cloud provider and shared between all consumers of a public cloud
 	- Public clouds - Microsoft Azure, Amazon Web Services (AWS) and Google Cloud Platform

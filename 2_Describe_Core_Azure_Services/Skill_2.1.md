@@ -1,0 +1,161 @@
+# Skill 2.1: Describe the core Azure architectural components
+
+- Intro
+  - Data is one of the top 5 most important asset of a company
+  - Companies fear losing their data when moving to the cloud
+- Azure Regions
+  - Geographies - boundaries; typically the border of a country since counties usually have their own regulations
+    - e.g. U.S. geography, Canada geography, UK geography, etc.
+    - Each geography further broken up into 2 or more regions hundreds of miles apart (300 miles)
+    - Government data is held in its own region due to additional regulations
+  - Regional Pair - pair of logical boundaries inside of geographies made of 2 regions
+    - Updates are performed on 1 of the regions in the pair at a time to avoid downtime
+    - Users should deploy resources redundantly to each region within the pair
+    - Customers do not see geographies or pairs when creating resources; only the regions
+  - Regions
+    - Each region has its own datacenters with physical hardware Azure uses
+    - Customers should replicate data in multiple regions
+    - Microsoft guarantees round-trip network performance of 2 ms or less between regions
+  - Datacenters
+    - Climate-controlled buildings for server racks with physical computer hardware
+    - Operate their own low-latency network infrastructure for reliable, fast network connectivity
+    - Power supply
+      - Isolated power supply and power generators in case of power outages
+      - 50% natural power as of 2018
+      - Goal is 60% by 2020
+      - Investing in development of natural gas-powered fuel cells
+    - All network traffic happens on Microsoft's own fiber-optic network
+      - Including data traveling overseas and between regions
+  - Having at least 2 regions per geography helps with disaster recovery efforts
+- Availability Zones
+  - Availability Zones vs. Sets
+    - Availability Sets - create 2 or more VMs in different server racks in a datacenter
+      - 99.95% SLA with availability sets
+    - Availability Zones - deploy 2 or more services into 2 different datacenters within a region
+      - 99.9% SLA with availability zones
+  - Provide high-availability and fault tolerance
+  - 2 Categories of services that support zones
+    - Zonal services
+      - VMs, managed disks used in a VM and public IP addressed used in VMs
+      - Must explicitly deploy zonal services into 2
+    - Zone Redundant services
+      - Zone redundant storage and SQL Databases
+      - Must specify the option to make them zone redundant when created
+        - ZRS (zone redundant storage) for storage
+        - SQL DBs - select option to make zone redundant
+  - Not as helpful with disaster recovery
+    - Fire in a datacenter - will benefit
+      - Different datacenters so when I goes down the other is still available
+    - Natural disaster - may not benefit
+      - Still in same region
+  - Not for all services - only for services that depend on physical hardware
+    - e.g. App Service Certificate - doesn't benefit from zones since it's not an infrastructure component
+  - Supported Services
+    - VMs - Windows & Linux
+    - VM Scale Sets
+    - Azure Kubernetes Service
+    - Managed disks
+    - Zone-redundant Storage
+    - Standard Load Balancer
+    - Standard IP Address
+    - VPN Gateway
+    - ExpressRoute Gateway
+    - Application Gateway V2
+    - Azure Firewall
+    - Azure Data Explorer
+    - Azure SQL DB
+    - Azure Cache for Redis
+    - Azure Cosmos DB
+    - Event Hubs
+    - Service Bus (Premium tier)
+    - Event Grid
+    - Azure AD Domain Services
+    - App Service Environments ILB
+  - Not available in all regions
+  - At least 3 in each enabled region
+  - Each has a water supply, cooling system, network and power supply isolated from other zones
+  - Achieve high availability by deploying in multiple zones
+  - Microsoft guarantees 99.9% SLA for VMs if 2 or more are in 2 or more zones
+  - Current Zones
+  - External Notes
+    - Availability zones expand the level of control you have to maintain the availability of the applications and data on your VMs. An Availability Zone is a physically separate zone, within an Azure region. There are three Availability Zones per supported Azure region.
+    - If one zone is compromised, then replicated apps and data are instantly available in another zone.
+- Resource Groups
+  - Resource Groups - logical container for Azure services that can be deployed as a single entity and helps with...
+    - Enterprise-level apps require a complex array of cloud services
+    - Possible to have multiple apps with multiple services spread across multiple Azure regions
+  - Advantages
+    - Easily setup deployments with an ARM template for single resource group
+      - Note: can also deploy to multiple resource groups but it requires a complicated chain of ARM templates
+    - Name with a easily recognizable name to see all Azure resources in an app at a glance
+    - Can be organized however the user chooses
+    - See resource costs for group
+      - Some companies create resource groups for different departments to track costs
+  - An Azure resource can only exist in 1 resource group, not multiple but you can move them from 1 group to another
+  - Automation Script will generate ARM template to deploy all Azure resources
+  - Deleting a resource group deletes all resources
+    - This can help prevent unexpected costs if you delete manually and forget a resource
+  - External Notes
+    - Resource groups help with managing all resources in a group (e.g. VMs, websites, etc.)
+    - Permissions apply to all services in the group
+    - Resources can interact across groups
+- Azure Subscriptions
+  - Automatically provided with Azure sign up
+  - Linked to all resources
+  - Multiple subscriptions can be added to 1 Azure account (Think about my personal account)
+  - Subscription limits (quotas)
+    - 250 Azure Storage accounts per region
+    - 25,000 VMs per region
+    - 980 resource groups across ALL regions
+  - Azure subscription in Azure Portal
+    - Overview blade - see cost breakdown for each resource, spending rate for subscription and estimated cost for the end of the current month.
+    - Costs by resource tile - further breakdown of Azure expenses. Costs by service name, location and resource group and graph of costs for the current month.
+    - Manage costs by creating budgets
+    - Azure invoices provided by clicking Invoices in the left menu
+    - How to create additional resources - to separate costs or if you are approaching a subscription limit (quota)
+      - Type subscription in search bar
+      - Select 'Subscriptions' from dropdown menu
+      - Click 'Add' in the subscriptions blade
+      - Choose subscription type
+        - Free Trial - Free access to Azure resources for a limited time
+        - Pay-As-You-Go - Only pay for what you use; no upfront cost and cancel at any time
+        - Pay-As-You-Go Dev/Test - Special subscription for VS users with discounted VM rates; cannot be used for production
+    - Subscription ID - unique identifier for subscriptions
+      - Can also provide a descriptive name (only for your personal use)
+      - Azure will always use the Subscription ID and Microsoft support will too
+- Management Groups
+  - Convenient way to apply policies and access control to Azure resources
+    - Control who has access to certain subscriptions/resources
+    - Control configuration of resources created within those subscriptions
+  - Resource vs. Management Groups
+    - Both resource and management groups are used to organize resources
+    - Management groups can only contain Azure subscriptions or other management groups
+  - Limitations to Management Groups
+    - Limited to a total of 10,000 management groups
+    - Only 6 levels per management group
+    - Only 1 parent per management group/subscription
+- Azure Resource Manager (ARM)
+  - A service that handles all interactions with Azure services
+    - Easily deploy and manage services
+  - Authenticates when creating a new resource and communicates with the resource provider for the service being created
+    - e.g. ARM passes the request for a new web app in Azure App Service to the Microsoft.Web provider
+    - There are resource providers for every Azure service but the names may not always match
+      - e.g. VM resource => Microsoft.Compute resource provider
+      - Don't have to know the details of the resource providers for the AZ-900 exam
+  - Both the portal and command-line tools can be used to create and manage Azure services
+    - Both work by using ARM
+    - Both interact with ARM using the ARM API
+    - VS also uses the ARM API
+  - ARM API Flow
+  -
+    - ARM uses declarative syntax
+      - Just tell ARM what you want to do not how to do it
+      - ARM templates - JSON files with a list of resources to create or modify
+        - Each resource has properties (e.g. name, region, pricing plan, domain names, etc.)
+    - ARM Deployment Template
+      - Set dependencies so deployments don't fail if a dependency hasn't been deployed
+  - ARM Benefits
+    - Easily Deploy Multiple Azure resources at once
+    - Reproduce any deployment with consistency
+    - Use declarative templates instead of complex deployment scripts
+    - Set up dependencies so resources are deployed in the right order
