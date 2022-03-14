@@ -1,0 +1,95 @@
+# Skill 6.2: Describe Azure service level agreements (SLAs) and service lifecycles
+
+- Azure Service Level Agreement (SLA)
+	- SLA - contract between tenant and service provider for a certain level of service
+	- SLAs are not available for all services
+		- i.e. services in preview mode
+	- Establish specific targets for availability 
+		- Define what the service provider will do if the targets aren't met
+	- Expressed as percentages
+		- Almost always 99% or higher
+		- 5 nines - Highest level is 99.999% 
+			- Annual downtime will not be more than 5.65 minutes
+		- 99.9% guarantees downtime for a month will not exceed 43.2 minutes
+	- Only outside of SLA when Microsoft had control of the problem
+	- Hard to determine if it's a platform issue or user error
+		- Microsoft has diagnostic data on all Azure operations across Azure services
+		- When support cases are opened, Microsoft performs data analytics against the diagnostic data to determine if the problem was with the Azure platform itself
+	- Tenants must submit a claim if they believe an app's availability fell below the SLA with a support case
+	- Microsoft can provide credits if needed the vary based on downtime and the service affect
+	- Exam Tip
+		- Claims must be submitted within 2 months of the end of the billing cycle during which the downtime occurred to receive credit
+	- Get past 99.9% SLA may require additional configurations
+		- E.g. VM w/ premium storage for all disks = 99.9%
+			- Deploy 2 more VMs in same availability set = 99.95%
+			- Deploy 2 or more instances across 2 or more availability zones within the same region = 99.99%
+	- Exam Tip
+		- SLAs can change
+		- New changes to SLAs go into affect when the Azure subscription is renewed
+- Interpret the Terms of an SLA
+	- SLAs vary between Azure services
+	- Configurations can affect SLA of a single Azure service
+	- Microsoft provides details for SLAs (see links)
+	- SLA Breakdown
+		- Bullet points - SLA outline
+		- Introduction - describes Azure SLA in general
+		- General Terms - describes SLA terms that refer to all Azure services
+			- Management Portal 
+			- Service Level
+			- Downtime
+			- Explains how you can make a claim and limitations for Azure SLAs
+		- SLA Details -  for the specific Azure service being viewed
+			- E.g. VM SLA
+				- defines VM-specific terms that relate to the VM SLA
+		- Additional Details - how to calculate availability and the amount of credit you may receive if the SLA isn't met
+			- < 99.99% - 10% service credit
+			- < 99% - 25% service credit
+			- < 95% - 100% service credit
+	- Apps with multiple services have multiple SLAs
+		- Must calculate a composite SLA based on the services used
+	- Individual SLAs vs Composite SLAs
+	- Multiply SLAs to get the Composite SLA value
+- Service Lifecycle in Azure
+	- Preview Offerings - pre-production period that allows Microsoft to get feedback in a real-world environment
+		- Aka Beta Offerings
+		- General Availability - service is fully supported, has an SLA and reached a certain level of completeness and reliability
+	- Exam Tip
+		- Preview services and features DO NOT have SLAs
+			- Not meant to be used in production environments
+			- Not available in all Azure regions
+	- Preview Services and Features
+		- First offered as a private preview
+		- Private Preview - service or feature made available to small set of customers for testing
+			- Access is by invitation from the engineering team developing that service or feature or by a signup from Microsoft
+			- Many previews are for features of existing services
+			- Expose only a subset of the functionality that will eventually be available
+			- Microsoft asks users to test specific scenarios and provide feedback
+				- Helps with finding bugs and usability issues in complex, real-world scenarios and environments
+			- Later transitions to a public preview
+			- Access the preview service or features
+				- Customers may receive a secret link to the Azure Portal that enables the service or feature and Microsoft will verify the subscription ID for participation
+				- Customers may be given command-line instructions
+					- It's common for the Azure portal interface to be developed while the feature is in Private Preview so command-line is typical 
+		- Public Preview - 
+			- Discounted rates
+			- Usually don't have SLAs
+			- Provided as-is
+			- Accessing the preview services or features
+				- No registration required
+				- Preview badge is displayed in Azure Portal
+				- Services and features in public preview are usually fully supported by Microsoft as though they were released
+				- May be referred to forums for support instead of Microsoft
+	- General Availability (GA)
+		- Point at which services and features are fully supported
+		- Has SLA from Microsoft
+			- Will either have a new SLA for new services
+			- Or the features will have the SLA of the service it's added to
+		- May not have to change anything if you participated in a preview
+			- There are times when Microsoft may ask you to delete resources created in preview and recreate them
+		- Not always GA for all Azure geographies
+		- Preview pricing (discounted) may still apply at the beginning of GA
+		- Official GA announcement provided on the Azure website
+	- Exam Tip
+		- All services/features have a preview phase
+			- Not all services and features offer private previews so it will instead be a public preview
+		- Private previews are usually charged at a discounted rate but can also be free

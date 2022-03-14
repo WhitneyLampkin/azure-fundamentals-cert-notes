@@ -1,0 +1,101 @@
+# Skill 6.1: Describe methods for planning and management of costs
+
+- Intro
+	- Before Cloud Deployment -  determine costs based on resources needed
+	- After Cloud Deployment - manage costs to stay within budgets
+- Factors affecting costs
+	- Factors
+		- Resource Type
+			- E.g. Virtual Network Charges
+				- Charge-less services
+					- No specific charge for Virtual Networks
+					- No charge for network traffic within a Virtual Network
+					- Not charged for network traffic coming into the Microsoft datacenter
+				- Charged services
+					- per GB for traffic in and out of the virtual network from peered virtual networks
+					- Charged for outbound data from datacenters after the first 5GB being free
+		- How you purchase the resource
+			- Enterprise Agreement - pay in advance and Microsoft will offer a reduced rate
+			- Longer-term agreements - offer even more price breaks
+			- Cloud Solution Partners (CSPs) - may provide complete solutions that are more cost-effective than purchasing all the resources yourself
+		- Azure Regions being used
+			- Azure Regions have different pricing
+		- 4 Billing Zones
+			- Zone 1 (Cheapest Outbound Networking Costs) - Australia Central, Australia Central 2, Canada Central, Canada East, North Europe, West Europe, France Central, France South, Germany North (Public), Germany West Central (Public), Norway East, Norway West, Switzerland North, Switzerland West, UK South, UK West, and all US regions
+			- Zone 2 (2nd Most Expensive Outbound Networking Costs) - East Asia, Southeast Asia, Australia East, Australia Southeast, Central India, South India, West India, Japan East, Japan West, Korea Central, and Korea South
+			- Zone 3 (Most Expensive Outbound Networking Costs) - Brazil South, South Africa North, South Africa West, UAE Central, and UAE North
+			- DE Zone 1 (2nd Cheapest Outbound Networking Costs) - Germany Central (Sovereign) and Germany Northeast (Sovereign)
+	- Meters - used to bill Azure services associated with a resource
+		- tracks how much a specific metric has been used by the resource
+	- Exam Tip - Each Azure Service has its own pricing page that outlines estimates on pricing for that resource based on typical usage
+	- Exam Tip
+		- Simply choosing the cheapest option for resources isn't the best cost effective way to control costs
+			- May have to pay for network traffic across regions - may increase costs above your savings amount
+		- Many Azure resources do not charge for network traffic within the same region, but they will charge for traffic across regions
+- Azure Pricing Calculator
+	- Helps with estimating expenses based on products users intend to you and where the products will be deployed
+	- best for estimating expenses for new applications in Azure
+	- Using the pricing calculator
+		- Select the desired products to use
+		- Scroll down to configure the specific details of each service
+			- Details vary based on how Microsoft charges for the product
+		- Informational Icon (next to product name) - displays a quick menu with additional resources
+			- Product Pricing Page
+			- Additional Product Details
+			- Documentation
+		- Clone (+) Button - adds another instance of that product to the estimate
+		- Review Pricing Estimate - by scrolling to the bottom of the page
+		- Choose a support plan to add to the estimate
+		- Applied pricing for agreements to the estimate
+			- Microsoft Online Services Agreement
+			- Enterprise Agreement
+			- Microsoft Customer Agreement
+		- Export to Excel file (Optional)
+		- Save - to make changes later if needed click 'Saved Estimates' tab
+		- Share (Optional)
+- The total cost of ownership (TCO) calculator
+	- Best for estimating savings for migrating existing on-premises applications to the cloud
+	- Using the TCO calculator
+		- Add details about on-premises servers, databases, storage and network usage
+			- Can also configure OS, VM or physical server type, etc.
+			- Database and storage systems should be added too
+			- Network usage should be included as well
+		- Click 'Next' to view TCO calculator assumptions
+			- Shows comprehensive list of on-premises expense assumptions based on
+				- Software Agreement plan purchases for on-premises servicers
+				- Details on current on-premises expenses
+				- IT labor costs 
+			- Best to carefully record expenses before generating a TCO report
+			- Adjust values for the assumptions before moving forward
+		- TCO Reports
+			- Detailed charts of expense savings
+			- Breakdown of on-premises costs and Azure costs
+			- Reports can be downloaded, saved and copied
+- Azure Cost Management
+	- Tool for analyzing costs at a granular level
+	- Other Benefits
+		- Create budget for Azure expenses
+		- Set configurable alerts to know when your approaching budgeted limit
+		- Analyze costs in detail
+	- Using Azure Cost Management
+		- Open the Azure Portal
+		- Search for 'Cost Management'
+		- Click 'Cost Management + Billing'
+		- Click 'Cost Management' in the left menu
+		- Create a Budget (recommended)
+	- Creating Budgets in the Cost Management Blade
+		- Click 'Budgets' in the left menu and Click 'Add'
+		- Name the budget
+		- Set spending amount and the period when it should reset
+		- Set a start date for the budget
+		- Set expiration date for the budget
+		- Click 'Next'
+		- Configure alerts conditions
+		- Add email address for the person being notified
+		- Click 'Create' to create the budget
+		- Click 'Cost Analysis' to see how spending compares to the budget
+	- Exam Tip
+		- Cost Management is also under Azure Marketplace (THIS IS DIFFERENT )
+			- Based on Cloudyn - cloud expense-management company purchased by Microsoft
+			- All Cloudyn features should now be migrated to Azure Cost Management (as of 2020)
+			- 
