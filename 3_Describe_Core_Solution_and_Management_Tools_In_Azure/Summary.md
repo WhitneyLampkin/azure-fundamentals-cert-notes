@@ -1,0 +1,58 @@
+# Summary
+
+- Internet of Things (IoT) - devices with sensors that communicate with each other via the internet
+- Azure IoT Hub - manage IoT devices and route messages to/from devices
+- Azure IoT Hub Provisioning Service - provision large # of devices into IoT Hub
+- Azure IoT Central - SaaS service to monitor IoT devices
+- Azure Sphere - service for IoT device security
+	- Azure Sphere MCU
+	- Azure Sphere OS
+	- Azure Sphere Security Service
+- Big Data - too much data to analyze with conventional methods in a timely manner
+- Azure Synapse - stores big data and provides data analysis in a cluster
+	- SQL Data Warehouse replacement
+	- Azure Synapse Cluster
+		- Synapse SQL
+		- Apache Spark Integration
+		- Data Integration of Apache Spark
+		- Azure Data Lake Storage
+		- Azure Synapse Studio - web-based user interface
+- Azure Data Lake Storage - stored unstructured data (works for any type of data)
+- HDInsight - Microsoft's solution for clustered Hadoop processing of big data
+- Azure Databricks - model data from data warehouse to be used in ML modeling
+	- Databricks Clusters - notebooks that can store all types of information
+- ML Pipeline - process of AI decision-making at several points along the neural network
+- Azure ML (Enterprise Edition) - has designers that help build, train and score ML models in a drag/drop interface
+- Cognitive Services - several APIs that allow you to quickly develop ML solutions
+- Azure Bot Service - runs on Azure App Service and makes it easy to build powerful AI-driven interaction
+- Serverless Computing - cloud provider uses surplus VMs in Azure to run code on demand to avoid losing money - users only pay when their code runs
+- Azure Functions - compute component of serverless in Azure
+- Azure Logic Apps - workflow serverless solution that uses connectors, triggers and actions
+- Azure Event Grid - raise and handle events as you interact with your Azure resources
+- Azure DevOps - plan, track and manage projects and work with teams
+- Azure DevTest Labs - access ready-made VMs configured exactly for what you need
+- Azure Portal - web-based interface for interacting with Azure services
+	- Uses ARM API calls under the hood to take to the Azure Resource Manager
+- Azure PowerShell Az - cross-platform PowerShell module that makes it easy to manage Azure resources in PowerShell
+- Azure CLI - command line tool that is cross-platform and can be scripted in multiple languages
+- Azure Cloud Shell - provides command line access to Azure from any device
+- Cloud Shell - persists files copied to it using an Azure Storage Account
+- Azure Mobile App - manage Azure resources from iOS or Android device
+- Azure Advisor - best practice recommendations for high availability, security, performance and cost
+- Azure Monitor - aggregates metrics for Azure resources then create alerts based on those metrics
+- Azure Service Health - provides information related to incidents in Azure that impact a user's resources
+
+## Resources
+
+- Azure Sphere Dev Kits
+- Azure Synapse Updates
+- HDInsight Docs
+- Databricks Quickstart
+- Configuring 3rd-party ML Tools
+- AI for Conversation and Earth Sciences
+- Wolf Analogy and AI Concerns
+- Cognitive Services APIs
+- Event Grid Events
+- Installing PowerShell on Linux
+- Install PowerShell for MacOS
+- All PowerShell Commands

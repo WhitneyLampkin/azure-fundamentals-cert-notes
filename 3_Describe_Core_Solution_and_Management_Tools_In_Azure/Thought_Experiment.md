@@ -1,0 +1,40 @@
+# Thought Experiment
+
+- Need to - Monitor environmental conditions of storage areas with newly installed thermostats
+	- Alert maintenance staff of changes in temperature and humidity
+	- IT department wants to upgrade firmware on thermostats if needed
+		- Concerned about it costing a lot of money
+		- Solution: Azure IoT Hub
+	- Need to keep the thermostats secure
+		- Concerned with connecting them to the internet
+		- Solution: Azure Sphere (but requires devices with MCUs)
+	- Use ML for research
+		- Large amount of data in a Data Lake Storage
+		- Need to analyze data and build ML models 
+			- Solution: Azure Synapse Analytics
+		- Scalable solution for millions of rows of data
+			- Solution: Azure HDInsights
+		- Unstructured data
+			- Solution: Azure Databricks
+		- Data Scientist want to use Jupyter Notebooks
+			- Solution: Azure Databricks
+	- Want programmers who don't know R or Python to build models
+		- Solution: Azure Machine Learning using the enterprise version for visual designers
+	- Need Basic Support to sales managers without using IT resources
+		- Solution: Azure Cognitive Services and Azure Bot Service
+	- Need to monitor memory leaks and reboot VM to resolve the issue automatically
+		- Solution: Azure Monitor and configure alerts with Function App to run code to reboot the VM 
+	- Resize VM occasionally with increased usage
+		- CIO would like a text message when it happens but they don't have devs available to build it
+		- Solution: Logic Apps workflow - listen for event with Event Grid and send text with Logic Apps
+	- Need to track work being done
+		- Solution: Azure DevOps and Azure Boards
+	- Need to provide a DevTest environment for a dev to develop solution without spending much time on VMs
+		- Solution: Azure DevTest Labs
+	- Easily Create/Delete web apps for development and testing
+		- Az module in PowerShell or Azure CLI
+	- Edit Bash scripts in Azure environment on the go
+		- Solution: Azure Cloud Shell & Azure Mobile App
+	- IT Director wants a good way to confirm they are adhering to Azure best practices
+		- Be aware of incidents in Azure that impact their resources
+		- Azure Advisor
