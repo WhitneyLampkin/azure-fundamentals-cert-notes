@@ -98,4 +98,3 @@
 		- Cost Management is also under Azure Marketplace (THIS IS DIFFERENT )
 			- Based on Cloudyn - cloud expense-management company purchased by Microsoft
 			- All Cloudyn features should now be migrated to Azure Cost Management (as of 2020)
-			- 
