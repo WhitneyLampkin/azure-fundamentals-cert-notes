@@ -1,0 +1,193 @@
+# Skill 4.2: Describe Azure Network Security
+
+- Defense in Depth
+	- Protecting user data with a multilayered approach
+		- Azure Firewall - prevent a malicious user from gaining access to the network
+		- Network Security Groups - control network traffic inside the network
+		- Azure DDoS Protection - help identify and mitigate malicious traffic that might otherwise seem normal
+	- Also known as the "castle approach"
+	- E.g. Medieval Times Security
+		- Layered security for castles
+			- 1st level - Moat
+			- 2nd level - Archers along a high wall
+			- 3rd level - High wall w/ sturdy gate
+			- 4th level - Army of men with swords and weapons
+- Network Security Groups (NSGs)
+	- Control traffic within the network
+	- Filter traffic on a network and apply rules on that traffic
+	- NSG have built-in rules by Azure designed to allow resources in the virtual network to communicate with each other
+		- Custom user rules can be added also
+			- Control traffic in and out of network
+			- Control traffic between resources in the network
+	- Example for a multi-tiered application
+		- Application Tiers
+			- Web Tier
+				- Subnet 1
+				- 10.0.1.0/24
+			- Middle Tier 
+				- Subnet 2
+				- 10.0.2.0/24
+			- Data Tier 
+				- Subnet 3
+				- 10.0.3.0/24
+		- Application Traffic Flow
+			- Subnet 1
+				- Receives data from another virtual network running Azure Firewall
+				- Tells Subnet 2 to process requests
+			- Subnet 2
+				- Requests data from the database server in Subnet 3 
+		- Securing the Application and Environment
+			- Subnet 1 should not have access to Subnet 3 and vice versa
+			- Only Subnet 1 should have access to the virtual network running Azure Firewall
+	- NSGs are associated with a subnet or network interface attached to a VM
+		- Subnets and network interfaces can only have 1 NSG
+		- Can have 1000s of rules
+		- Rules for network interfaces are applied first before subnet rules
+	- Exam Tip
+		- NSG associated with a subnet
+			- Affects all VMs on subnet
+			- Affects traffic to and from the subnet
+	- Preventing rules from interfering with each other
+		- Rules have a priority of 100 to 4,096
+			- Lower priority have higher precedence
+			- Network traffic is applied against rule with lowest numeric value first
+				- If it matches, rule processing stops
+				- If not, go to the next rule
+			- Similar to short-circuiting in programming
+			- Default Azure rules have a priority in the 65,000 range to prevent them from messing with the custom user rules that max out at 4,096
+	- Creating an NSG
+		- Search for 'Network Security Group' in Azure Marketplace
+		- Select existing resource group or click 'Create New'
+		- Add inbound/outbound rules for the NSG
+			- Inbound Security Rules - allow traffic in
+			- Outbound Security Rules - allow traffic out
+		- Click Add to add a new Rule
+			- Use CIDR notation or can also enter a specific IP address or change the Source drop-down menu to Any to apply to ALL IP addresses
+		- After rule creation
+			- Click 'Subnets' on left menu to associate an NSG with a subnet
+			- Click 'Network Interfaces' on left menu to associate it with a network interface used by a VM
+			- Click 'Associate'
+		- Outbound rules are created the same way
+	- Flow Record - stores the state of a connection and the NSG will allow traffic that corresponds to that flow record without an explicit rule
+		- Meaning inbound rules will automatically apply to outbound rules
+		- E.g. A rule for inbound traffic to port 80 on IP address range of 10.1.0.0/16 will also allow outbound traffic in the same range using flow record
+		- Flow record no longer in effect when traffic stops - won't allow outbound rules when the inbound traffic stops
+	- Service Tags
+		- Special identifier created by Microsoft that applies to Internet or a specific service type within Azure
+		- Configure NSG rules when IP addresses are unknown
+		- E.g. AppService service tag for Azure App Service
+		- Also have Region specific service tags allow/deny traffic from certain regions
+		- Using Service Tags
+			- Set Source of the rule to Service Tag
+			- Select a Service Tag from the Source dropdown list menu
+			- AppService.CentralUS service tag can be used to allow traffic from Azure App Service resources in Central US region
+- Azure Firewall (PaaS)
+	- Protects your network from bad actors
+	- Firewall - appliance through which network traffic moves in and out of a particular network
+		- Allows only desired traffic and reject the other
+		- Uses rules that specify a source and destination IP address range and port combination
+		- Default - all traffic is denied
+			- Rules have to be set to allow any traffic
+			- Internet Rule
+				- Allow traffic on ports 80 (HTTP) and 443 (HTTPS)
+				- Then configure rule to allow that traffic to your web server
+	- Choose between Azure Firewall or 3rd-party firewalls
+	- 99.95% uptime guarantee
+	- Auto-scaling based on network needs
+	- Stateful Firewall - stores data in its memory about the state of the network connections that flow through it
+		- Can determine if network packets for an existing connection represent a security threat
+		- If someone "spoofs" your IP address, the firewall will know that the hardware address changed and will reject the connection
+	- Typical Azure Firewall Setup
+		- Centralized hub network that contains the Azure Firewall and VM (VM operates as a jumpbox).
+			- The firewall exposes a public IP address but the jumpbox VM does not.
+		- At least 1 additional network (called spoke networks) that do not expose a public IP address.
+			- Spoke networks contain your various Azure resources
+	- Jumpbox 
+		- VM that users can remote into to manage other VMs in the network
+		- The other VMs only allow remote access from the jumpbox VM IP address
+		- Hub-and-spoke configuration - to access VMs in a spoke network, you must remote into the spoke network VM from the jumpbox
+	- Configurations where Azure Firewall can be used
+		- Hub-and-spoke configuration - most common
+		- Single virtual network & Azure Firewall to filter traffic from the internet
+	- 
+- Configuring firewalls
+	- Create an instance of Azure Firewall
+		- Add at creation of VM
+			- Azure creates a subnet in the virtual network called AzureFirewallSubnet 
+		- Add to an existing virtual network later
+	- Tell Azure to send traffic to the firewall
+		- Create a route table using Route Table item in Azure Marketplace - an Azure resource that is associated with a subnet and contains rules (called routes) that define how network traffic in the subnet is handled
+		- Associate the round table with one or more subnets
+			- Click 'Subnets' (left menu)
+			- Click 'Associate'
+			- Select the Virtual Network and Subnet
+		- NOTE: Round Table must be in the same region as the virtual network. If not, couldn't associate the subnet with the route table.
+	- Configure rules in the firewall so that it knows what to do with that traffic
+	- For this example
+		- Associate Jumpbox-Subnet and ServerSubnet with the route table
+		- This handles network traffic from jumpbox VM and all traffic from the ServerSubnet
+		- Exam Tip - Firewall handle traffic into the jumpbox VM but also flowing from the subnet to other servers to ensure that it's not sending inappropriately sending data out of your network
+	- Create user-defined route so the traffic is directed through Azure Firewall
+		- Click 'Routes' 
+		- Click 'Add'
+	- Note: Route applies to all devices on the subnets associated with the route table
+	- Configure a firewall rule in Azure Firewall to forward traffic to the jumpbox VM
+		- Open Azure Firewall in Azure Portal
+		- Click 'Rules'
+		- Select rule type
+		- Click 'Add' to add a new rule collection
+			- 3 Types of Rule Collections - Rules are applied in the order listed below
+				- NAT Rule Collection -  forward traffic from the firewall to another device on the network
+					- Network Address Translation (NAT)
+				- Network Rule Collection - rules that allow traffic on specific IP address ranges and ports
+				- Application Rules Collection - allow applications (e.g. Windows Update) to communicate across the network; or used to allow other domains (azure.com microsoft.com) 
+			- Rule collections contain all rule of a specific type and priority
+			- Priority 100 - 65,000
+				- Lower numbers have a higher priority
+			- Traffic is rejected if it doesn't match any of the rules
+	- Allow access to remote into jumpbox VM
+		- Configure a NAT rule that forwards traffic on port 55000 to port 3389 (remote desktop's port) on the internal IP of the jumpbox VM
+	- Threat Intelligence Feature - protects from known-malicious IP addresses and domain names
+		- The list is updated by Microsoft
+		- Microsoft Threat Intelligence Feed - stored collected data
+		- Has to be enabled
+			- Choose to have Azure send an alert
+			- Choose to have the traffic denied
+- Note: 0.0.0.0/0 is the notation for all traffic
+- The book's example uses jumpbox and JIT to explain the benefit of Azure Firewall but Azure Bastion is a better choice (not on the exam).
+- Azure DDoS Protection
+	- Protects against DDoS attacks
+	- Prevents malicious attack that affect access to network resources
+	- Distributed Denial of Service (DDoS) Attacks 
+		- Happens to applications that can be accessed over the internet
+		- Overload resources rendering the application unavailable
+		- Exploit security flaws in an application
+	- Feature of Virtual Networks
+	- 2 Tiers
+		- Basic 
+			- Protects against volume-based DDoS attacks
+			- Distributes large amounts of volume across Azure's entire network infrastructure
+			- Applies to IPv4 and IPv6 public IP addresses
+			- No logging or reporting of DDoS mitigation
+			- No alerts
+			- Free
+		- Standard
+			- Protection from volume-based DDoS attacks
+			- Protection from attacks designed to target security of apps when used with Azure Application Gateway
+			- Provides logging and alerting of events and mitigations
+			- Access to experts
+			- Applies only to IPv6 public IP addresses
+			- For Enterprise customers
+			- $2,994/month + fee per GB of processed data and $30/resource after the first 100
+			- Enabling Standard Tier
+				- Requires a DDoS Protection plan
+				- To Create 
+					- Click 'Create a DDoS Protection Plan' in Azure Portal
+					- Apply the plan to the virtual network and other virtual networks
+						- virtual networks don't have to be in the same subscription
+			- Monitors network 24/7
+			- Uses ML to profile traffic and adjust itself to accommodate the network's traffic profile
+			- During DDoS event, stream logs to SIEM system
+				- SIEM systems - designed to allow for aggregation of data from a large # of sources for the purpose of analysis and to comply with data retention policies and standards
+			- BreakingPoint Cloud - used to simulate DDoS events
+	- Exam Tip - Need to know that 1 DDoS Protection Plan can be used for multiple subscriptions because creating new ones instead are costly.
