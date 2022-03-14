@@ -1,0 +1,147 @@
+# Skill 5.2: Describe Azure governance features
+
+- Intro
+	- Common to have a large number of Azure resources that span different Azure services
+		- Need cost control to prevent costs from spiralling out of control
+		- Restrictions for allowed regions, tagging regions, etc.
+- Azure Policy
+	- Used to define rules applied when Azure resources are created and managed
+		- E.g. policy for the creation of only a certain size of VM being created 
+		- E.g. policy that specifies that the VM can only be created in the South-Central US region
+		- Azure can enforce the above policies so that you honor the company policy
+	- Access Azure Policy
+		- Type 'policy' in the search box in Azure portal
+		- Click 'Policy'
+			- OR
+				- Click 'All Services'
+				- Search for 'policy' in the list
+		- Both options will show the Policy Blade
+		- Click ellipsis next to the 'Scope' textbox to change the scope to a different subscription
+		- ASC Default - collection of multiple policies defined by Azure Security Center
+		- Initiative - complex rules that ensure governance of company policy added as a group of full suite of policies
+	- Adding a built-in policy definition
+		- Click ellipses next to the Policy Definition textbox
+		- Perform a search via the search box
+		- Select an available Policy Definition that is marked as 'built-in'
+			- Parameters Tab - see the effect of a policy
+			- 6 Policy Effects (not all are available
+				- Append - adds additional properties to the resource
+					- E.g. Add tag with a specific value to resources
+				- Audit - logs a warning if the policy is not complied with
+				- AuditIfNotExists - specify an additional resource type that must exist along with the resource being created or updated
+					- Warnings are logged when the resource type doesn't exist
+				- Deny - denies the creation or update operation
+				- DeployIfNotExists - specify an additional resource type you want deployed with the resource being created or updated
+					- Resource type is automatically deployed if it's not included
+				- Disabled - the policy is no in effect
+	- Users can also define their own policies
+		- Custom Policy Definitions - ARM templates that define the policy
+- Resource Locks
+	- Resource Locks - prevent changes to a resource of its deletion
+	- Resource Locks vs. RBAC
+		- RBAC - controls access to resources
+		- Locks - apply to everyone with access to the resource; not a particular role
+	- Exam Tip
+		- Only the Owner or User Access Administrator roles in RBAC can create locks
+		- Admin can create custom roles to allow others to create locks
+	- Locks can be applied at these levels
+		- Resource Level
+		- Resource Group Level
+		- Subscription Level
+	- Applying Locks to Resource
+		- Open the resource in Azure Portal
+		- Click 'Locks' in the Settings section of the menu on the left
+		- Click 'Add' to add a lock to the resource
+			- Can also be added to Resource Groups or Subscriptions
+		- Name the lock in the 'Lock Name Box'
+		- Set Lock Type
+		- Add optional note
+	- Read-only locks
+		- Read-only lock - most restrictive lock
+		- Has unpredictable results because of the way Azure  handles the locks
+		- Prevents changing properties of the resource or delete the resource
+		- Delete lock - prevents deleting the resource but allows properties to be changed
+	- Locks only apply to operations handled by ARM
+		- E.g. Azure Key Vault read-only lock would prevent a user from changing access policies on the vault but users can still add and delete keys, certifications and secrets because those things aren't handled by ARM but internally by Azure Key Vault
+		- E.g. Read-only locks on storage accounts prevent all users from listing the access keys for the storage account
+	- Locks applied to parent level affects all child levels
+		- A resource group lock, locks all resources in the group
+		- A subscription lock, locks all resources in that subscription
+	- Nesting Locks
+		- Most restrictive lock = effective lock
+	- Exam Tip
+		- Locks are inherited - locks are automatically applied to resources added at a later time
+	- Denied operations due to locks show an error message in Azure Portal
+	- Exam Tip
+		- Not all resource types will tell you the error is a lock error
+		- Some will be a generic error
+		- Trying the same operation in Azure CLI or AZ module in PowerShell should give the details of the lock
+	- Editing/Deleting a Lock
+		- When the lock is open
+		- Click 'Edit' or 'Delete' in the portal
+- Tags
+	- Tags - makes organizing resources easier
+		- Name
+		- Value
+	- Viewing all Tags
+		- Choose 'All Services' from the main meu in the portal
+		- Search Tags in the list of services
+	- Tags aren't added to the resources in a resource group
+		- This provides flexibility and power when viewing Azure resources
+	- Exam Tip
+		- Tags help with organizing Azure billing expenses
+		- A downloaded Azure invoice has resource tags in one of the columns
+		- Azure invoices are downloaded as comma-separated values and can be viewed in Microsoft Excel
+- Azure Blueprints
+	- Makes deploying to the cloud easier
+		- Eliminates some of the hassle of planning
+			- Before a single resource is created in Azure, companies have to plans
+			- Consultants may even be needed that require a ton of money
+		- Configure the cloud environment just as you need
+		- Configure policies and governance 
+		- Save configuration for duplicate deployments
+	- Artifacts - items added to Azure blueprints
+		- E.g. Resource group, ARM template, policy assignment or role assignment
+	- Blueprints can be saved in a subscription or management group
+		- Blueprints in management groups can also be used by nested subscriptions that belong in that group
+	- Exam Tip
+		- Azure Blueprints vs. ARM Templates
+			- ARM template - used to facilitate predictable and reproducible deployments
+				- Files designed to define a deployment
+				- Can be artifacts for Blueprints
+			- Blueprints - have more benefits than ARM templates
+				- Actual Azure resources
+				- Azure maintains a connection between blueprints and the resource that uses the blueprint
+					- Allows for iteration on blueprints to improve them
+					- Easier to evolve with company's needs
+					- Versioned and can be stored in source-control
+					- Tracking is easier with source control
+				- Do not replace ARM templates
+				- Use ARM templates as artifacts
+	- Creating Azure Blueprints
+		- Search for 'Blueprints'
+		- Click 'Create'
+		- Choose from a standard Microsoft template or start with a blank blueprint
+		- [Blank Blueprint]
+			- Enter name, description and set the place where the blueprint definition will be saved
+			- Blueprint Definition will be a subscription or management group
+		- Add Artifacts
+			- Click 'Add Artifact'
+			- Select Artifact Type
+			- Enter form info
+			- Use the 'This value should be specified when the blueprint is assigned checkbox next to the Resource Group Name and/or Location
+			- Click 'Add' to add it to the blueprint
+		- Click 'Save Draft'
+			- Draft mode allows for editing and updating
+	- Publishing Blueprints
+		- Click 'Blueprints Definitions' and click the blueprint
+		- Click 'Publish Blueprint' button
+		- Must provide a version number when publishing
+	- Assigning a blueprint - Once published, blueprints are assigned to a subscription
+		- Enter an assignment name
+		- Select location
+		- Select blueprint definition version
+		- NOTE: You could also accept the defaults for these settings and/or specify a lock assignment for the resources the blueprint creates by clicking the desired assignment setting
+		- Clicking 'Assign' completes the blueprint assignment
+	- Exam Tip - Blueprint name and definitions CANNOT be modified once created
+	- When the blueprint is assigned to a subscription, resources defined by the blueprint are created in that subscription.

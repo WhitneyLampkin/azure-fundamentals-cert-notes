@@ -1,0 +1,157 @@
+# Skill 5.1: Describe core Azure identity services
+
+- Authentication and Authorization
+	- Authentication - identifying valid users with username and password
+	- Authorization - checks to determine actions the user can perform while interacting with the application
+		- Happens after authentication
+- Azure Active Directory (AAD)
+	- Cloud-based identity service in Azure to help authenticate and authorize users
+		- Used to enforce authentication and authorization in Azure and more
+	- Azure Active Directory isn't the same as Windows Active Directory
+	- Azure Active Directory used to give users access to 3rd-party and on-premises company resources using the same username and password
+	- Azure AD is made of a directory of users
+		- Identity - unique identifier for the user that includes userID, password and other properties
+		- Directory Roles - used for authorization to perform certain activities in Azure AD
+	- Two Other Azure AD Entities
+		- Service Principals - applications in Azure AD
+		- Managed Identity - special service principal that can only be used with Azure resources
+	- Azure AD resource is automatically created when Azure subscriptions are created
+	- Accessing Users in Azure AD
+		- Click 'Users' in the left menu
+		- 'All Users' blade opens
+	- Adding a new Azure AD user
+		- Username - used to log into Azure AD
+		- Domain name - must be owned by user and associated with the Azure AD
+		- New users can be assigned to a group or role
+			- Groups - makes it easier to manage a larger number of similar users
+	- Azure AD B2B (business to business) Collaboration - allows the addition of users who don't belong to the company
+		- Invite outside users to be members of the Azure AD
+		- Those users obtain access to the company resources
+		- Guest users - outside users
+			- Adding a Guest User
+				- Click 'New Guest'
+				- Fill out Form
+				- An email invite is sent to the guest user to join the Azure AD
+				- To accept, user's email address must be associated with a Microsoft account
+				- Users can create a new Microsoft account if needed
+			- Guest users access
+				- Users can be granted social media access
+		- Can add new applications for other cloud providers, custom apps, on-premises app or any other app
+			- The added app must have a login page to connect to Azure AD
+			- Single Sign-On (SSO) - configure Azure AD so that users can authenticate to it using the same credentials used to log into Azure AD
+	- Exam Tip 
+		- Service Principal - used to configure which resources an application can access
+		- Created when an application is given access to Azure resources using role-based access control.
+	- Exam Tip 
+		- Azure AD B2B - allows inviting guest users to Azure AD from other businesses
+		- Azure AD B2C - allows inviting users access to Azure AD applications by signing in with existing accounts, such as Facebook or Google
+	- Benefits of using Azure AD
+		- Easily revoke access from a single interface
+		- If granting access with Azure AD with SSO configured, can remove that easily in Azure Portal
+			- The user never has to know the username and password to gain access
+	- Pricing Tiers
+		- Free
+		- Office 365 Apps
+		- Premium Plans - enable multifactor authentication for users
+			- Premium P1
+			- Premium P2
+- Conditional Access and Multifactor Authentication (MFA)
+	- Can help make user accounts much more secure
+	- Admins of Azure AD can decide if user has access to a particular resource by requiring authentication with a username and password and authorization to access the resource
+	- Azure Conditional Access - allows users to create policies applied against users
+		- Policies use assignments and access controls to configure access to resources
+	- Assignments - define who a policy applies to
+		- Can apply to users, groups of users, roles in Azure AD or guest users
+		- Can specify rules for an application like Microsoft 365
+		- Can define conditions that must be met (Platform requirements - iOS, Android, Windows), specific locations by IP address and more
+	- Access Controls - determine how a Conditional Access policy is enforced
+		- Block Access - most restrictive access control
+		- Can be used to require a user
+			- Use a device with certain conditions
+			- Using an approved application to access resources
+			- Using MFA
+	- Creating a Conditional Access Policy
+		- Open Azure Portal 
+		- Search for 'Azure AD Conditional Access'
+		- Click 'New Policy' button
+	- Exam Tip
+		- Conditional Access is only available in Premium Tiers of Azure AD
+		- New Policy button is disabled in the free mode
+- Multifactor Authentication (MFA)
+	- Authentication using a combination of:
+		- Something you know
+			- Username and password
+		- Something you have
+			- Phone or mobile device
+		- Something you are
+			- Facial recognition or fingerprint
+	- Three-factor authentication or 3FA - use of all 3 of the above
+	- Two-factor authentication or 2FA - use of 2 of the above
+		- Microsoft calls it two-step verification
+	- MFA is 2FA and does require 3FA, but it can be because your device may enforce 3FA
+	- By default - users login to Azure AD with username and password
+		- This is risky because hackers can gain access with this information
+	- Enabling MFA
+		- Open the 'All Users' blade
+		- Click 3 dots at the top of the page
+		- Click 'Multi-Factor Authentication'
+			- Opens a new browser window displaying the Azure AD user management site
+		- Select 1 or more users to enable multifactor authentication and click 'Enable'
+		- When enabled, users will need to use 2-step method to authenticate
+	- An OAUTH hardware token is a small device that displays an access number. When prompted in your browser, enter that access number within a short timeframe in order to complete the authentication.
+	- Note: Combined registration is recommended from Microsoft to allow users to register for MFA and self-service password reset in one operation.
+- Role-based Access Control (RBAC)
+	- Generic term for authorizing users based on defined roles the user belongs
+	- Azure uses it across Azure resources
+		- Control how users and applications interact with the Azure resources
+	- 4 Elements of RBAC
+		- Security Principal - represents an identity
+			- E.g. user, group, application or special AAD entity called a managed identity
+			- Managed Identity - how you authorize another Azure service to access an Azure resource
+		- Role - defines how the security principal can interact with an Azure resource
+			- Aka Role Definition
+		- Scope - defines the level at which the role is applied
+			- Specifies how much control the security principal has
+		- Role Assignments - assigned to a security principal at a particular scope and defines the level of access for the security principal
+	- 3 Built-In Roles
+		- Owner - gives full access to the resources
+		- Contributor - create and manage resources but cannot give those rights to anyone else
+		- Reader - read-only; can only see the Azure resources; cannot create, delete or manage those resources
+	-  Giving someone access to resources using RBAC
+		- Open the resource you want to give someone access to
+		- Click 'Access Control (IAM)' to configure RBAC
+		- Click 'Add' to add a role
+		- Choose the role to assign (list of roles is based on the resource)
+		- Choose who or what you want to assign the role to
+		- Click 'Save'
+	- Exam Tip
+		- RBAC scope is defined by where the RBAC role is assigned
+			- Open the resource group and assign, then it's at the resource group level
+			- Open the web app within a resource group and assign the role, then it's scoped to that web app only
+			- RBAC Scope Levels
+				- Management Group
+				- Subscription
+				- Resource Group
+				- Resource Level (Individual Resource)
+	- Exam Tip
+		- Role assignments are additive
+		- The role highest in the hierarchy applies to all nested levels
+			- E.g. Owner Role at resource group level and Website Contributor role at web app level within that resource group would result in the web app level having the owner level role
+	- RBAC enforced by ARM - Azure Resource Manager
+	- Azure resources are authenticated by ARM and a token is generated
+		- Token
+			- User identity
+			- Role assignments
+			- Included with all operations performed for that resource
+	- Checking a user's access in Azure Portal
+		- Open the resource in Azure
+		- Click 'Access Control (IAM)'
+		- Use the dropdown menu and search box to search for a user or object
+		- Click the 'user or object' to see the access level
+		- Click the role that's displayed to see a greater level of detail
+			- Shows detailed list of operations
+			- Shows read, write, delete and other actions that a security principal can perform
+	- Exam Tip 
+		- Forms of Security Principals
+			- Service Principals - security principals that specifically represent applications
+			- User Principals - security principal that represents a user

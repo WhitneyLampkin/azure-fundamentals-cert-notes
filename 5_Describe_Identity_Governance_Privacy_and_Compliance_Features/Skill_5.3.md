@@ -1,0 +1,90 @@
+# Skill 5.3: Describe privacy and compliance resources
+
+- Intro
+	- Deploying to the cloud means some responsibility is offloaded to the provider (Microsoft)
+		- Includes compliance and data protection standards responsibilities
+		- i.e. Shared Responsibility Model from Skill 1.2
+	- General Data Protection Regulation (GDPR) - regulates personal data handling in EU
+	- International Organization of Standards (ISO) 27001 standard
+		- ISO 27001 compliance required for some businesses to agree to do business with cloud providers
+	- National Institute of Standards and Technology (NIST)
+		- NIST SP 800-53 - publication by NIST that outlines all the requirements for information systems dealing with government data
+- Microsoft Privacy Statement
+	- Comprehensive statement from Microsoft outlining the following handling of data and personal information:
+		- Personal Data Microsoft Collects
+		- How Microsoft uses personal data
+		- Reasons Microsoft shares personal data
+		- How to access and control your personal data collected by Microsoft
+		- How Microsoft users cookies and similar technologies
+		- What organizations providing Microsoft software to you can do with your data
+		- What data is shared when you use a Microsoft Account with a third party
+		- Specifies about how Microsoft secure data, where it's processed and retention policies
+- Cloud Adoption Framework for Azure
+	- Brings together all the best practices from Microsoft employees, partners and lessons learned by Microsoft customers
+	- Must learn about the cloud before planning to move to the cloud
+		- Best practices
+		- Architecting cloud apps
+		- Migrating resources
+		- Setting up governance and policies
+	- Microsoft uses Azure itself so they are skilled in how to plan, organize, deploy and govern Azure resources
+- Trust Center
+	- Web portal to learn all Microsoft's approach to security, privacy and compliance
+	- Security solutions, security products, how Microsoft handles privacy and data management, etc.
+	- White papers and checklists as tools for users to ensure they are secure and compliant
+- Service Trust Portal (STP)
+	- Portal that provides access to various compliance tools Microsoft provides to track compliance in applications running on Microsoft's platforms
+	- Launching point for Compliance Manager
+	- Compliance Manager - tool for managing regulatory compliance in the cloud
+		- Easily visualize compliance with industry standards
+		- Provides details on how to improve compliance
+		- Full details on how Microsoft maintains compliance
+	- Accessing Compliance Manager
+		- Click 'Compliance Manager' at the top of the STP page
+			- Track compliance with related applications by aggregating them into groups that user's can name themselves
+			- Each group has a tile
+	- Data Protection Baseline - review details on assessment and see Microsoft recommendations
+		- Click 'Review' on an item to  review the status for that action
+		- Record implementation status, assign the action to specific person, etc.
+		- Enter a date for the implementation plan to track the results and a date for testing
+- Azure Sovereign Regions
+	- Azure policies won't cover all compliance requirements
+	- US government requires that data stays within the USA and that only citizens of US can have access to systems used to store that data
+		- This requirement cannot be met with policies
+		- Cannot be met at all in a public cloud
+		- Azure Government Cloud - Microsoft has isolated Azure data centers
+	- Azure Government data centers
+		- Separate from public data centers
+		- All employees are screened US citizens
+		- Microsoft employees providing technical support but must US citizens as well
+		- For Federal, city and municipalities as well
+		- Users must be vetted
+		- Microsoft ExpressRoute locations with dedicated fiber-optic components separate from the other Azure networks specifically for government use
+		- Azure Government Cloud vs. Public Cloud
+			- Both 
+				- Same features and services
+				- The skillset is the same so developers using the public cloud can then transition to work using government clouds and use those skills
+			- Azure Government 
+				- Portal site https://portal.azure.us/
+				- URLs for Azure services use .us top-level domain
+					- i.e. App Service web app in Azure Government would have the following default domain name: https://webapp.azurewebsites.us/
+			- Public 
+				- Portal site https://portal.azure.com/
+		- United States Department of Defense 
+			- DoD Impact Level 5 Provisional Authorization - additional compliance requirements
+				- Controlled unclassified information 
+				- Requires additional levels of protection
+				- Additional DoD requirements are met by a subset of data centers within Azure Government that are approved for DoD usage
+	- Azure Germany
+		- Develop because of EU's need for unique approach
+		- Distinct cloud system to meet compliance needs
+		- For customers in EU, The European Free Trade Association and the UK
+		- Physically located in Germany
+		- Operated by a local IT company called T-Systems International (subsidiary of Deutsche Telekom) that operates as a data trustee
+		- Data trustee - full control over all data stored in Azure Germany and the infrastructure used to house that data
+		- Microsoft only manages data that doesn't have access to customer data
+	- Azure China aka Microsoft Azure operated by 21 Vianet aka Azure 21 Vianet
+		- Microsoft Azure China - separate cloud for China 
+		- Operated in Shanghai Blue Cloud Technology Co., Ltd (aka BlueCloud)
+		- BlueCloud
+			- Owned by Beijing 21 Vianet Broadband Data Center Co., Ltd (aka 21 Vianet) - an internet data center service provider in China
+		- Doesn't offer all of Azure's features but features and services are constantly being added
